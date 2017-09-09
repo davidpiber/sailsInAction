@@ -1,13 +1,9 @@
-$(function whenDomIsReady(){
+$(document).ready(function() {
     setTimeout(function afterRetrievingVieos() {
         var videos = [
             {
                 title: 'JOURNEY TO JAH - Gentleman Ft. Alborosie',
-                src: 'https://www.youtube.com/watch?v=dN8FTAx06rE&list=RDdN8FTAx06rE'
-            },
-            {
-                title: 'Suga Roy & Conrad Crystal feat. Alborosie - Run Come',
-                src: 'https://www.youtube.com/watch?v=JEXDg8fz8uI&index=2&list=RDdN8FTAx06rE'
+                src: 'https://www.youtube.com/embed/4uKX5CS75fA'
             }
         ];
 
@@ -21,7 +17,7 @@ $(function whenDomIsReady(){
         return html;
     },'');
 
-    $('the-list-of-videos ul').replaceWith(videosHtml);
+    $('.the-list-of-videos ul').replaceWith(videosHtml);
 
     }, 750);
 
