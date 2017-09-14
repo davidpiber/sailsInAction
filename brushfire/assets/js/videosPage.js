@@ -14,22 +14,41 @@ function($scope, $http) {
   $scope.submitVideosError = false;
 
   // Get the existing videos.
-  $http.get('/video')
-    .then(function onSuccess(sailsResponse) {
-      $scope.videos = sailsResponse.data;
-    })
-    .catch(function onError(sailsResponse) {
+  // $http.get('/video')
+  //   .then(function onSuccess(sailsResponse) {
+  //     $scope.videos = sailsResponse.data;
+  //   })
+  //   .catch(function onError(sailsResponse) {
 
-      if (sailsResponse.data.status === '404') {
-        return;
-      }
+  //     if (sailsResponse.data.status === '404') {
+  //       return;
+  //     }
 
-      console.log("An unexpected error occurred: " + sailsResponse.data.statusText);
+  //     console.log("An unexpected error occurred: " + sailsResponse.data.statusText);
 
-    })
-    .finally(function eitherWay() {
-      $scope.videosLoading = false;
+  //   })
+  //   .finally(function eitherWay() {
+  //     $scope.videosLoading = false;
+  //   });
+
+  io.socket.get('/video', function whenServerResponds(data, JWR){
+    $scope.videosLoading = false;
+    if(JWR.statusCode >= 400) {
+      $scope.submitVideosError = true;
+      console.log('somethin bad happened!');
+      reurn;
+    }
+    $scope.videos = data;
+    $scope.$apply();
+  });
+
+  io.socket.on('video', function whenAVideoIsCreatedUpdatedOrDestroyed(event) {
+    $scope.videos.unshift({
+      title: event.data.title,
+      src: event.data.src
     });
+    $scope.$apply();
+  });
 
   $scope.submitNewVideo = function() {
 
